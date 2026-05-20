@@ -6,40 +6,250 @@
   <title>GitHub User Explorer</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #0f172a 100%);
+      background-attachment: fixed;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .glow-effect {
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .glow-effect:hover {
+      box-shadow: 0 0 50px rgba(0, 212, 255, 0.6);
+      transform: translateY(-5px);
+    }
+
+    .neon-border {
+      border: 2px solid transparent;
+      background: linear-gradient(135deg, #1a1f2e, #1a1f2e) padding-box,
+                  linear-gradient(135deg, #00d4ff, #0099ff) border-box;
+    }
+
+    .card-glass {
+      backdrop-filter: blur(10px);
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .card-glass:hover {
+      border: 1px solid rgba(0, 212, 255, 0.5);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.3); }
+      50% { box-shadow: 0 0 50px rgba(0, 212, 255, 0.6); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .shimmer-effect {
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+      background-size: 1000px 100%;
+      animation: shimmer 3s infinite;
+    }
+
+    .search-box {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 153, 255, 0.1));
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .search-box:focus {
+      border: 2px solid rgba(0, 212, 255, 0.8);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+      outline: none;
+    }
+
+    .btn-cyber {
+      background: linear-gradient(135deg, #00d4ff, #0099ff);
+      border: 2px solid rgba(0, 212, 255, 0.5);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-cyber::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: left 0.5s ease;
+    }
+
+    .btn-cyber:hover::before {
+      left: 100%;
+    }
+
+    .btn-cyber:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.7);
+    }
+
+    .repo-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8));
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .repo-card:hover {
+      border: 1px solid rgba(0, 212, 255, 0.6);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+    }
+
+    .user-avatar {
+      position: relative;
+      display: inline-block;
+    }
+
+    .user-avatar::after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: linear-gradient(135deg, #00d4ff, #0099ff);
+      border-radius: 50%;
+      z-index: -1;
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .stat-item {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 153, 255, 0.05));
+      border-left: 3px solid #00d4ff;
+      transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+      border-left: 3px solid #0099ff;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 255, 0.1));
+      transform: translateX(5px);
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(0, 212, 255, 0.3);
+      border-top: 3px solid #00d4ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-banner {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2));
+      border: 2px solid rgba(239, 68, 68, 0.5);
+      border-radius: 12px;
+    }
+
+    .success-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+      box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+    }
+
+    .code-tag {
+      background: rgba(0, 212, 255, 0.15);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: #00d4ff;
+    }
+
+    @media (max-width: 768px) {
+      .float { animation: none; }
+    }
+  </style>
 </head>
 
-<body class="bg-slate-900 text-white min-h-screen p-8">
+<body class="text-white min-h-screen p-4 md:p-8">
 
-  <div class="max-w-6xl mx-auto">
+  <div class="max-w-7xl mx-auto">
 
-    <h1 class="text-5xl font-bold text-center mb-10">
-      GitHub User Explorer
-    </h1>
-
-    <div class="flex justify-center gap-4 mb-10 flex-wrap">
-
-      <input
-        id="username"
-        type="text"
-        placeholder="Digite um usuário do GitHub"
-        class="p-4 rounded-xl w-96 text-black outline-none"
-      >
-
-      <button
-        id="searchBtn"
-        class="bg-blue-600 px-6 py-4 rounded-xl hover:bg-blue-700 cursor-pointer transition"
-      >
-        Pesquisar
-      </button>
-
+    <!-- Header com efeito futurista -->
+    <div class="relative mb-16 text-center">
+      <div class="absolute inset-0 blur-3xl bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-cyan-500/20 rounded-full" style="width: 100%; height: 200px; margin: auto;"></div>
+      
+      <div class="relative">
+        <h1 class="text-6xl md:text-7xl font-black mb-4 gradient-text float">
+          <i class="fas fa-code-branch mr-3"></i>GitHub Explorer
+        </h1>
+        <p class="text-gray-400 text-lg md:text-xl">Explore perfis, repositórios e descubra desenvolvedores similares</p>
+      </div>
     </div>
 
-    <div id="loading" class="hidden text-center text-xl text-blue-400">
-      Carregando...
+    <!-- Search Bar Futurista -->
+    <div class="mb-12">
+      <div class="neon-border rounded-2xl p-1">
+        <div class="bg-slate-950 rounded-xl p-6 md:p-8">
+          <div class="flex flex-col md:flex-row gap-4">
+            <input
+              id="username"
+              type="text"
+              placeholder="🔍 Digite um usuário do GitHub..."
+              class="flex-1 bg-slate-900 search-box p-4 rounded-xl text-white placeholder-gray-500 text-lg"
+            >
+            <button
+              id="searchBtn"
+              class="btn-cyber text-white px-8 py-4 rounded-xl font-bold text-lg whitespace-nowrap"
+            >
+              <i class="fas fa-search mr-2"></i>Pesquisar
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div id="error" class="hidden text-center text-xl text-red-400 mb-6"></div>
+    <!-- Loading State -->
+    <div id="loading" class="hidden text-center py-12">
+      <div class="inline-block">
+        <div class="loading-spinner mb-4"></div>
+        <p class="text-cyan-400 text-lg font-semibold">Carregando dados...</p>
+      </div>
+    </div>
 
+    <!-- Error Banner -->
+    <div id="error" class="hidden error-banner p-6 mb-6 text-center text-red-400 font-semibold"></div>
+
+    <!-- Content Container -->
     <div id="content"></div>
 
   </div>
@@ -53,42 +263,34 @@ async function buscarUsuario() {
   const contentDiv = document.getElementById('content');
   const errorDiv = document.getElementById('error');
 
-  // Limpar erros anteriores
   errorDiv.classList.add('hidden');
   errorDiv.textContent = '';
 
-  // Validar entrada
   if (!username) {
-    errorDiv.textContent = 'Por favor, digite um nome de usuário!';
+    errorDiv.textContent = '⚠️ Por favor, digite um nome de usuário!';
     errorDiv.classList.remove('hidden');
     return;
   }
 
   try {
-    // Mostrar carregamento
     loadingDiv.classList.remove('hidden');
     contentDiv.innerHTML = '';
 
-    // Buscar dados do usuário
     const response = await fetch(`https://api.github.com/users/${username}`);
 
     if (!response.ok) {
-      throw new Error('Usuário não encontrado');
+      throw new Error('❌ Usuário não encontrado');
     }
 
     const user = await response.json();
 
-    // Buscar repositórios do usuário
     const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?sort=stars&order=desc&per_page=6`);
     const repos = await reposResponse.json();
 
-    // Buscar perfis parecidos
     const similarUsers = await buscarPerfisParecidos(user, repos);
 
-    // Ocultar carregamento
     loadingDiv.classList.add('hidden');
 
-    // Renderizar dados
     renderizarUsuario(user, repos, similarUsers);
 
   } catch (error) {
@@ -104,18 +306,15 @@ async function buscarPerfisParecidos(user, repos) {
     const linguagensComuns = extrairLinguagensComuns(repos);
     const queries = [];
 
-    // Buscar por localização se disponível
     if (user.location && user.location.trim()) {
       queries.push(`location:"${user.location}" followers:>10 repos:>2`);
     }
 
-    // Buscar por linguagem principal
     if (linguagensComuns.length > 0) {
       const linguagem = linguagensComuns[0];
       queries.push(`language:${linguagem} followers:>10 repos:>2`);
     }
 
-    // Buscar por range de seguidores similar
     const minSeguidores = Math.max(Math.floor(user.followers * 0.5), 1);
     const maxSeguidores = Math.ceil(user.followers * 2);
     queries.push(`followers:${minSeguidores}..${maxSeguidores} repos:>2`);
@@ -133,10 +332,8 @@ async function buscarPerfisParecidos(user, repos) {
           const items = data.items || [];
 
           for (const usuario of items) {
-            // Evitar duplicatas e o próprio usuário
             if (usuario.login !== user.login && 
                 !usuariosPaRecidos.find(u => u.login === usuario.login)) {
-              // Buscar dados completos do usuário
               const userFullData = await fetch(`https://api.github.com/users/${usuario.login}`);
               const userFull = await userFullData.json();
               usuariosPaRecidos.push(userFull);
@@ -175,80 +372,111 @@ function renderizarUsuario(user, repos, similarUsers = []) {
   const contentDiv = document.getElementById('content');
 
   contentDiv.innerHTML = `
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Profile Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
       
-      <div class="md:col-span-1">
-        <div class="bg-slate-800 rounded-xl p-6 text-center">
-          <img src="${user.avatar_url}" alt="${user.login}" class="w-32 h-32 rounded-full mx-auto mb-4">
-          <h2 class="text-2xl font-bold mb-2">${user.name || user.login}</h2>
-          <p class="text-gray-400 mb-4">@${user.login}</p>
-          ${user.bio ? `<p class="text-gray-300 mb-4">${user.bio}</p>` : ''}
-          <a href="${user.html_url}" target="_blank" class="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 inline-block">
-            Visitar Perfil
-          </a>
+      <!-- Profile Card -->
+      <div class="lg:col-span-1">
+        <div class="card-glass rounded-2xl p-8 neon-border glow-effect">
+          <div class="text-center">
+            <div class="user-avatar mb-6">
+              <img src="${user.avatar_url}" alt="${user.login}" class="w-40 h-40 rounded-full border-4 border-slate-800">
+            </div>
+            <h2 class="text-3xl font-bold mb-2 gradient-text">${user.name || user.login}</h2>
+            <p class="text-cyan-400 text-lg mb-4 font-mono">@${user.login}</p>
+            ${user.bio ? `<p class="text-gray-300 mb-6 italic">"${user.bio}"</p>` : ''}
+            <a href="${user.html_url}" target="_blank" class="btn-cyber text-white px-6 py-3 rounded-lg inline-block font-semibold">
+              <i class="fas fa-arrow-up-right-from-square mr-2"></i>Visitar Perfil
+            </a>
+          </div>
         </div>
 
-        <div class="bg-slate-800 rounded-xl p-6 mt-6">
-          <h3 class="text-xl font-bold mb-4">Estatísticas</h3>
-          <div class="space-y-2 text-sm">
-            <p>👥 Seguidores: <span class="font-bold">${user.followers}</span></p>
-            <p>📌 Seguindo: <span class="font-bold">${user.following}</span></p>
-            <p>📦 Repositórios: <span class="font-bold">${user.public_repos}</span></p>
-            <p>📍 Local: <span class="font-bold">${user.location || 'Não informado'}</span></p>
+        <!-- Stats Card -->
+        <div class="card-glass rounded-2xl p-8 mt-6 neon-border">
+          <h3 class="text-2xl font-bold mb-6 gradient-text"><i class="fas fa-chart-line mr-2"></i>Estatísticas</h3>
+          <div class="space-y-3">
+            <div class="stat-item p-4 rounded-lg">
+              <p class="text-gray-400 text-sm uppercase tracking-widest">Seguidores</p>
+              <p class="text-2xl font-bold text-cyan-400">${user.followers.toLocaleString('pt-BR')}</p>
+            </div>
+            <div class="stat-item p-4 rounded-lg">
+              <p class="text-gray-400 text-sm uppercase tracking-widest">Seguindo</p>
+              <p class="text-2xl font-bold text-cyan-400">${user.following.toLocaleString('pt-BR')}</p>
+            </div>
+            <div class="stat-item p-4 rounded-lg">
+              <p class="text-gray-400 text-sm uppercase tracking-widest">Repositórios</p>
+              <p class="text-2xl font-bold text-cyan-400">${user.public_repos.toLocaleString('pt-BR')}</p>
+            </div>
+            <div class="stat-item p-4 rounded-lg">
+              <p class="text-gray-400 text-sm uppercase tracking-widest">Local</p>
+              <p class="text-lg font-bold text-cyan-400"><i class="fas fa-map-marker-alt mr-2"></i>${user.location || 'Não informado'}</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="md:col-span-2">
-        <h3 class="text-2xl font-bold mb-4">Repositórios em Destaque</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          ${repos.map(repo => `
-            <a href="${repo.html_url}" target="_blank" class="bg-slate-800 rounded-xl p-4 hover:bg-slate-700 transition">
-              <h4 class="font-bold text-lg mb-2 text-blue-400">${repo.name}</h4>
-              <p class="text-gray-300 text-sm mb-3">${repo.description || 'Sem descrição'}</p>
-              <div class="flex gap-4 text-xs text-gray-400">
-                ${repo.language ? `<span>💻 ${repo.language}</span>` : ''}
-                <span>⭐ ${repo.stargazers_count}</span>
-                <span>🔀 ${repo.forks_count}</span>
-              </div>
-            </a>
-          `).join('')}
+      <!-- Repositories Section -->
+      <div class="lg:col-span-2">
+        <div class="card-glass rounded-2xl p-8 neon-border">
+          <h3 class="text-3xl font-bold mb-8 gradient-text"><i class="fas fa-code mr-2"></i>Repositórios em Destaque</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            ${repos.map(repo => `
+              <a href="${repo.html_url}" target="_blank" class="repo-card rounded-xl p-6 group">
+                <div class="flex items-start justify-between mb-3">
+                  <h4 class="font-bold text-xl text-cyan-400 group-hover:text-blue-400 transition flex-1 break-words"><i class="fas fa-folder mr-2"></i>${repo.name}</h4>
+                  ${repo.private ? '<span class="text-xs bg-red-500/30 text-red-300 px-2 py-1 rounded">Privado</span>' : '<span class="text-xs bg-green-500/30 text-green-300 px-2 py-1 rounded">Público</span>'}
+                </div>
+                <p class="text-gray-300 text-sm mb-4 line-clamp-2">${repo.description || 'Sem descrição'}</p>
+                <div class="flex flex-wrap gap-3 text-xs text-gray-400">
+                  ${repo.language ? `<span class="code-tag px-2 py-1 rounded"><i class="fas fa-code mr-1"></i>${repo.language}</span>` : ''}
+                  <span class="text-yellow-400"><i class="fas fa-star mr-1"></i>${repo.stargazers_count}</span>
+                  <span class="text-gray-400"><i class="fas fa-code-branch mr-1"></i>${repo.forks_count}</span>
+                </div>
+              </a>
+            `).join('')}
+          </div>
         </div>
       </div>
 
     </div>
 
     ${similarUsers.length > 0 ? `
-      <div class="mt-12">
-        <h3 class="text-3xl font-bold mb-6">👥 Perfis Parecidos</h3>
+      <!-- Similar Users Section -->
+      <div class="mt-16">
+        <div class="mb-8">
+          <h3 class="text-4xl font-bold gradient-text"><i class="fas fa-user-group mr-3"></i>Perfis Similares</h3>
+          <p class="text-gray-400 mt-2">Desenvolvedores com interesses e experiências parecidas</p>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           ${similarUsers.map(similarUser => `
-            <div class="bg-slate-800 rounded-xl p-6 hover:bg-slate-700 transition">
-              <div class="text-center mb-4">
-                <img src="${similarUser.avatar_url}" alt="${similarUser.login}" class="w-24 h-24 rounded-full mx-auto mb-3">
-                <h4 class="text-xl font-bold text-blue-400">${similarUser.name || similarUser.login}</h4>
-                <p class="text-gray-400 text-sm">@${similarUser.login}</p>
+            <div class="card-glass rounded-2xl p-6 neon-border hover:neon-border group transition duration-300">
+              <div class="text-center mb-6">
+                <div class="user-avatar mb-4">
+                  <img src="${similarUser.avatar_url}" alt="${similarUser.login}" class="w-28 h-28 rounded-full border-4 border-slate-800">
+                </div>
+                <h4 class="text-xl font-bold text-cyan-400 group-hover:text-blue-400">${similarUser.name || similarUser.login}</h4>
+                <p class="text-gray-400 text-sm font-mono">@${similarUser.login}</p>
               </div>
               
-              ${similarUser.bio ? `<p class="text-gray-300 text-sm mb-3 text-center">${similarUser.bio}</p>` : ''}
+              ${similarUser.bio ? `<p class="text-gray-300 text-sm mb-4 text-center italic line-clamp-2">"${similarUser.bio}"</p>` : ''}
               
-              <div class="grid grid-cols-3 gap-2 text-center text-xs mb-4">
-                <div class="bg-slate-700 rounded p-2">
-                  <p class="text-gray-400">Seguidores</p>
-                  <p class="font-bold">${similarUser.followers}</p>
+              <div class="grid grid-cols-3 gap-2 text-center mb-6">
+                <div class="bg-slate-900/50 rounded-lg p-3 border border-cyan-400/20">
+                  <p class="text-gray-400 text-xs uppercase tracking-widest">Seguidores</p>
+                  <p class="text-lg font-bold text-cyan-400">${similarUser.followers > 999 ? (similarUser.followers/1000).toFixed(1) + 'k' : similarUser.followers}</p>
                 </div>
-                <div class="bg-slate-700 rounded p-2">
-                  <p class="text-gray-400">Repos</p>
-                  <p class="font-bold">${similarUser.public_repos}</p>
+                <div class="bg-slate-900/50 rounded-lg p-3 border border-cyan-400/20">
+                  <p class="text-gray-400 text-xs uppercase tracking-widest">Repos</p>
+                  <p class="text-lg font-bold text-cyan-400">${similarUser.public_repos}</p>
                 </div>
-                <div class="bg-slate-700 rounded p-2">
-                  <p class="text-gray-400">Seguindo</p>
-                  <p class="font-bold">${similarUser.following}</p>
+                <div class="bg-slate-900/50 rounded-lg p-3 border border-cyan-400/20">
+                  <p class="text-gray-400 text-xs uppercase tracking-widest">Seguindo</p>
+                  <p class="text-lg font-bold text-cyan-400">${similarUser.following}</p>
                 </div>
               </div>
 
-              <a href="${similarUser.html_url}" target="_blank" class="block w-full text-center bg-blue-600 px-3 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-semibold">
-                Ver Perfil
+              <a href="${similarUser.html_url}" target="_blank" class="block w-full btn-cyber text-white px-3 py-2 rounded-lg transition text-sm font-semibold">
+                <i class="fas fa-arrow-up-right-from-square mr-2"></i>Ver Perfil
               </a>
             </div>
           `).join('')}
