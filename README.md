@@ -23,7 +23,7 @@ Um aplicativo web interativo que permite explorar perfis de usuários do GitHub 
 
 ## 📋 Sobre o Projeto
 
-O **GitHub User Explorer** é uma aplicação desenvolvida durante um Mini-Hacktoon (hackathon compacto) que integra a API pública do GitHub para fornecer uma experiência de busca e exploração de perfis de desenvolvedores com recomendações inteligentes de usuários similares.
+O **GitHub User Explorer** é uma aplicação desenvolvida durante um Mini-Hacktoon (hackathon compacto) que integra a API pública do GitHub para fornecer uma experiência de busca e exploração
 
 ### ✨ Principais Características
 
@@ -173,8 +173,8 @@ O projeto está hospedado no GitHub Pages. Acesse:
 - **Impacto**: Resolve problema onde as funções não eram acessíveis quando chamadas pelo evento DOM
 - **Resultado**: Aplicação agora funciona perfeitamente em todos os navegadores
 
-#### 8️⃣ Nova Funcionalidade - Perfis Parecidos ⭐ **RECENTE**
-**"feat: Adicionar busca inteligente de perfis parecidos e sumário no README"**
+#### 8️⃣ Nova Funcionalidade - Perfis Parecidos ⭐
+**"Adicionar funcionalidade de busca de perfis parecidos"** (`5506137` - 20 mai, 22:06)
 - **Novas Funções Implementadas**:
   - `buscarPerfisParecidos()`: Busca usuários similares com múltiplas estratégias
   - `extrairLinguagensComuns()`: Identifica as 3 linguagens mais utilizadas
@@ -183,7 +183,26 @@ O projeto está hospedado no GitHub Pages. Acesse:
   - Linguagens de programação utilizadas
   - Range de seguidores similar (0.5x a 2x)
 - **UI Atualizada**: Nova seção "Perfis Parecidos" com cards dos usuários recomendados
-- **Documentação**: README atualizado com sumário e detalhes da nova funcionalidade
+
+#### 9️⃣ Atualização de Documentação 📚
+**"docs: Atualizar README com nova funcionalidade de perfis parecidos e adicionar sumário"** (`f928231` - 20 mai, 22:13)
+- README atualizado com sumário e detalhes da nova funcionalidade
+- Documentação completa das mudanças realizadas
+- Adição de exemplos de uso
+
+#### 🔟 Interface Redesenhada 🎨 **MAIS RECENTE**
+**"✨ Interface redesenhada: tema dark mode futurista com gradientes, animações e efeitos neon"** (`daa40bc` - 20 mai, 22:21)
+- **Redesign Visual Completo**:
+  - Tema dark mode futurista com gradientes neon
+  - Animações suaves e efeitos visuais modernos
+  - Paleta de cores: purpura, rosa, ciano em fundo escuro
+- **Melhorias de UX**:
+  - Transições e hover effects aprimorados
+  - Melhor contraste e legibilidade
+  - Efeitos de glassmorphism e neon glow
+- **Performance**:
+  - Otimização de animações CSS
+  - Melhor responsividade em todos os dispositivos
 
 ## 🔍 Nova Funcionalidade: Perfis Parecidos
 
@@ -236,6 +255,7 @@ e com seguidores em range similar
 3. **Design Responsivo**: Adaptação para desktop, tablet e mobile
 4. **Feedback Visual**: Cores diferenciadas para sucesso e erro
 5. **Recomendações Inteligentes**: Sugestões contextualizadas de perfis similares
+6. **Interface Futurista**: Tema dark mode com gradientes e efeitos neon
 
 ### Otimizações
 1. **Limite de Requisições**: Máximo de 6 repos e 6 perfis parecidos para não sobrecarregar
