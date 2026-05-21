@@ -23,7 +23,7 @@ Um aplicativo web interativo que permite explorar perfis de usuários do GitHub 
 
 ## 📋 Sobre o Projeto
 
-O **GitHub User Explorer** é uma aplicação desenvolvida durante um Mini-Hacktoon (hackathon compacto) que integra a API pública do GitHub para fornecer uma experiência de busca e exploração
+O **GitHub User Explorer** é uma aplicação desenvolvida durante um Mini-Hackathon (hackathon compacto) que integra a API pública do GitHub para fornecer uma experiência de busca e exploração
 
 ### ✨ Principais Características
 
